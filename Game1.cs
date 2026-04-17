@@ -17,7 +17,10 @@ namespace animation_lesson
         Rectangle window;
 
         Rectangle tribbleBrownRect;
+        Rectangle tribbleGreyRect;
+
         Vector2 tribblebrownSpeed;
+        Vector2 tribblegreySpeed;
 
 
         public Game1()
@@ -32,13 +35,16 @@ namespace animation_lesson
             // TODO: Add your initialization logic here
 
             tribbleBrownRect = new Rectangle(301, 10, 100, 100);
+            tribbleGreyRect = new Rectangle(400, 12, 100, 100);
+
             window = new Rectangle(0, 0, 800, 600);
             _graphics.PreferredBackBufferWidth =window.Width;
             _graphics.PreferredBackBufferHeight =window.Height;
             _graphics.ApplyChanges();
 
             tribblebrownSpeed = new Vector2(2,2);
-            
+            tribblegreySpeed = new Vector2(4, 2);
+
 
             base.Initialize();
         }
@@ -48,7 +54,13 @@ namespace animation_lesson
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             tribblebrownTexture = Content.Load<Texture2D>("tribblebrown");
+            tribblegreyTexture = Content.Load<Texture2D>("tribblegrey");
+            tribblecreamTexture = Content.Load<Texture2D>("tribblecream");
+            fur4Texture = Content.Load<Texture2D>("fur4");
+
+
             tribbleSound = Content.Load<SoundEffect>("tribble_coo");
+
 
             // TODO: use this.Content to load your game content here
         }
@@ -77,6 +89,15 @@ namespace animation_lesson
 
             }
 
+           
+            
+            tribbleGreyRect.Y += (int)tribblegreySpeed.Y;
+            if (tribbleGreyRect.Bottom > window.Height || tribbleGreyRect.Top < 0)
+            {
+                tribblegreySpeed.Y *= -1;
+                GraphicsDevice.Clear(Color.Red);    
+            }
+
 
 
 
@@ -93,6 +114,9 @@ namespace animation_lesson
 
 
             _spriteBatch.Draw(tribblebrownTexture, tribbleBrownRect, Color.White);
+            _spriteBatch.Draw(tribblegreyTexture, tribbleGreyRect, Color.White);
+
+
 
             _spriteBatch.End();
 
