@@ -18,10 +18,12 @@ namespace animation_lesson
 
         Rectangle tribbleBrownRect;
         Rectangle tribbleGreyRect;
+        Rectangle tribbleCreamRect;
+
 
         Vector2 tribblebrownSpeed;
         Vector2 tribblegreySpeed;
-
+        Vector2 tribblecreamSpeed;
 
         public Game1()
         {
@@ -36,6 +38,7 @@ namespace animation_lesson
 
             tribbleBrownRect = new Rectangle(301, 10, 100, 100);
             tribbleGreyRect = new Rectangle(400, 12, 100, 100);
+            tribbleCreamRect = new Rectangle(400, 12, 100, 100);
 
             window = new Rectangle(0, 0, 800, 600);
             _graphics.PreferredBackBufferWidth =window.Width;
@@ -44,6 +47,7 @@ namespace animation_lesson
 
             tribblebrownSpeed = new Vector2(2,2);
             tribblegreySpeed = new Vector2(4, 2);
+            tribblecreamSpeed = new Vector2(6, 2);
 
 
             base.Initialize();
@@ -79,6 +83,7 @@ namespace animation_lesson
                 tribblebrownSpeed.X *= -1;
                 tribbleSound.Play();
                 
+
             }
             tribbleBrownRect.Y += (int)tribblebrownSpeed.Y;
 
@@ -89,13 +94,25 @@ namespace animation_lesson
 
             }
 
-           
-            
+
+
             tribbleGreyRect.Y += (int)tribblegreySpeed.Y;
+
             if (tribbleGreyRect.Bottom > window.Height || tribbleGreyRect.Top < 0)
             {
+
                 tribblegreySpeed.Y *= -1;
-                GraphicsDevice.Clear(Color.Red);    
+            }
+
+
+
+
+            tribbleCreamRect.X += (int)tribblecreamSpeed.X;
+            if (tribbleCreamRect.Right > window.Width || tribbleCreamRect.Left <= 0)
+            {
+                tribblecreamSpeed.X *= -1;
+                tribbleSound.Play();
+
             }
 
 
@@ -115,10 +132,28 @@ namespace animation_lesson
 
             _spriteBatch.Draw(tribblebrownTexture, tribbleBrownRect, Color.White);
             _spriteBatch.Draw(tribblegreyTexture, tribbleGreyRect, Color.White);
+            _spriteBatch.Draw(tribblecreamTexture, tribbleCreamRect, Color.White);
+
+
+            if (tribbleGreyRect.Bottom >=window.Height)
+            {
+                GraphicsDevice.Clear(Color.Red);
+               
+            }
+            
+
+             if (tribbleGreyRect.Top < 0)
+            {
+                GraphicsDevice.Clear(Color.Pink);
+            }
 
 
 
-            _spriteBatch.End();
+
+
+
+
+                _spriteBatch.End();
 
             // TODO: Add your drawing code here
 
