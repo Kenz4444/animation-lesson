@@ -15,7 +15,7 @@ namespace animation_lesson
 
         SoundEffect tribbleSound;
         
-
+        MouseState mouseState;
         Rectangle window;
 
         Rectangle tribbleBrownRect;
@@ -30,6 +30,19 @@ namespace animation_lesson
         Vector2 tribblegreySpeed;
         Vector2 tribblecreamSpeed;
         Vector2 fur4Speed;
+
+
+
+
+        enum Screen
+        {
+            Intro,
+            TribbleYard
+        }
+        Screen screen;
+
+
+
 
 
         int randNum;
@@ -78,6 +91,9 @@ namespace animation_lesson
             tribblegreySpeed = new Vector2(4, 7);
             tribblecreamSpeed = new Vector2(6, 2);
             fur4Speed = new Vector2(2, 2);
+
+
+            screen = Screen.Intro;
 
 
             base.Initialize();
@@ -174,6 +190,17 @@ namespace animation_lesson
                 
                 
 
+            }
+
+
+            mouseState= Mouse.GetState();
+
+            if (screen == Screen.Intro)
+            {
+                if(mouseState.LeftButton== ButtonState.Pressed)
+                {
+                    screen = Screen.TribbleYard;
+                }
             }
 
             
