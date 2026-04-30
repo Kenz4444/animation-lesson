@@ -10,10 +10,15 @@ namespace animation_lesson
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        
-        Texture2D tribblebrownTexture, tribblegreyTexture, tribblecreamTexture, fur4Texture;
+
+        Texture2D tribblebrownTexture, tribblegreyTexture, tribblecreamTexture, fur4Texture, tribbleintroTexture, endTexture;
+
+        SpriteFont intro;
+        SpriteFont right;
+        SpriteFont end;
 
         SoundEffect tribbleSound;
+        SoundEffect introScreen;
         
         MouseState mouseState;
         Rectangle window;
@@ -37,7 +42,8 @@ namespace animation_lesson
         enum Screen
         {
             Intro,
-            TribbleYard
+            TribbleYard,
+            End
         }
         Screen screen;
 
@@ -107,9 +113,16 @@ namespace animation_lesson
             tribblegreyTexture = Content.Load<Texture2D>("tribblegrey");
             tribblecreamTexture = Content.Load<Texture2D>("tribblecream");
             fur4Texture = Content.Load<Texture2D>("fur4");
+            tribbleintroTexture = Content.Load<Texture2D>("tribble_intro");
+            endTexture = Content.Load<Texture2D>("End");
+
+            intro = Content.Load<SpriteFont>("intro");
+            right = Content.Load<SpriteFont>("right");
+            end = Content.Load<SpriteFont>("ending");
 
 
             tribbleSound = Content.Load<SoundEffect>("tribble_coo");
+            introScreen = Content.Load<SoundEffect>("Opening_Remastered");
 
 
             // TODO: use this.Content to load your game content here
@@ -123,87 +136,119 @@ namespace animation_lesson
             // TODO: Add your update logic here
 
 
-            tribbleBrownRect.X += (int)tribblebrownSpeed.X;
-            if (tribbleBrownRect.Right > window.Width || tribbleBrownRect.Left <=0)
-            {
-                tribblebrownSpeed.X *= -1;
-                tribbleSound.Play();
-                backColor = Color.Orange;
-                
-
-            }
-            tribbleBrownRect.Y += (int)tribblebrownSpeed.Y;
-
-            if (tribbleBrownRect.Bottom > window.Height || tribbleBrownRect.Top < 0)
-            {
-                tribblebrownSpeed.Y *= -1;
-                tribbleSound.Play();
-                backColor = Color.White;
-
-            }
-
-
-
-            tribbleGreyRect.Y += (int)tribblegreySpeed.Y;
-
-            if (tribbleGreyRect.Top > window.Height)  
-            {
-                
-                tribbleGreyRect.Y = -tribbleGreyRect.Height;
-                
-                
-                
-            }
             
-                
-
-
-
-
-                tribbleCreamRect.X += (int)tribblecreamSpeed.X;
-            if (tribbleCreamRect.Right > window.Width || tribbleCreamRect.Left <= 0)
-            {
-                tribblecreamSpeed.X *= -1;
-                tribbleSound.Play();
-                backColor = Color.Pink;
-
-            }
-
-
-
-
-            fur4Rect.X += (int)fur4Speed.X;
-            if (fur4Rect.Right > window.Width || fur4Rect.Left <= 0)
-            {
-                fur4Speed.X *= -1;
-                
-                
-
-
-            }
-
-            fur4Rect.Y += (int)fur4Speed.Y;
-
-            if (fur4Rect.Bottom > window.Height || fur4Rect.Top < 0)
-            {
-                fur4Speed.Y *= -1;
-                
-                
-
-            }
 
 
             mouseState= Mouse.GetState();
 
             if (screen == Screen.Intro)
             {
-                if(mouseState.LeftButton== ButtonState.Pressed)
+                introScreen.Play();
+                if (mouseState.LeftButton== ButtonState.Pressed)
                 {
                     screen = Screen.TribbleYard;
+                    introScreen.Dispose();
+                    
                 }
+
+                
             }
 
+
+
+             
+            else if (screen == Screen.TribbleYard)
+            {
+                tribbleBrownRect.X += (int)tribblebrownSpeed.X;
+                if (tribbleBrownRect.Right > window.Width || tribbleBrownRect.Left <= 0)
+                {
+                    tribblebrownSpeed.X *= -1;
+                    tribbleSound.Play();
+                    backColor = Color.Orange;
+
+
+                }
+                tribbleBrownRect.Y += (int)tribblebrownSpeed.Y;
+
+                if (tribbleBrownRect.Bottom > window.Height || tribbleBrownRect.Top < 0)
+                {
+                    tribblebrownSpeed.Y *= -1;
+                    tribbleSound.Play();
+                    backColor = Color.White;
+
+                }
+
+
+
+                tribbleGreyRect.Y += (int)tribblegreySpeed.Y;
+
+                if (tribbleGreyRect.Top > window.Height)
+                {
+
+                    tribbleGreyRect.Y = -tribbleGreyRect.Height;
+
+
+
+                }
+
+
+
+
+
+
+                tribbleCreamRect.X += (int)tribblecreamSpeed.X;
+                if (tribbleCreamRect.Right > window.Width || tribbleCreamRect.Left <= 0)
+                {
+                    tribblecreamSpeed.X *= -1;
+                    tribbleSound.Play();
+                    backColor = Color.Pink;
+
+                }
+
+
+
+
+                fur4Rect.X += (int)fur4Speed.X;
+                if (fur4Rect.Right > window.Width || fur4Rect.Left <= 0)
+                {
+                    fur4Speed.X *= -1;
+
+
+
+
+                }
+
+                fur4Rect.Y += (int)fur4Speed.Y;
+
+                if (fur4Rect.Bottom > window.Height || fur4Rect.Top < 0)
+                {
+                    fur4Speed.Y *= -1;
+
+
+
+                }
+
+                mouseState = Mouse.GetState();
+                if (screen == Screen.TribbleYard)
+                {
+                    if (mouseState.RightButton == ButtonState.Pressed)
+                    {
+                        screen = Screen.End;
+                    }
+                }
+
+
+
+            }
+
+
             
+            
+
+            
+
+
+
 
 
 
@@ -220,10 +265,28 @@ namespace animation_lesson
             _spriteBatch.Begin();
 
 
-            _spriteBatch.Draw(tribblebrownTexture, tribbleBrownRect, brownColorMask);
-            _spriteBatch.Draw(tribblegreyTexture, tribbleGreyRect, Color.White);
-            _spriteBatch.Draw(tribblecreamTexture, tribbleCreamRect, Color.White);
-            _spriteBatch.Draw(fur4Texture, fur4Rect, Color.White);
+           if (screen == Screen.Intro)
+            {
+                _spriteBatch.Draw(tribbleintroTexture, new Rectangle(0, 0, 800, 600), Color.White);
+                _spriteBatch.DrawString(intro, "Click Left to Watch the Tribbles!", new Vector2 (100, 500), Color.Black);
+            }
+
+           else if (screen == Screen.TribbleYard)
+            {
+                _spriteBatch.Draw(tribblebrownTexture, tribbleBrownRect, brownColorMask);
+                _spriteBatch.Draw(tribblegreyTexture, tribbleGreyRect, Color.White);
+                _spriteBatch.Draw(tribblecreamTexture, tribbleCreamRect, Color.White);
+                _spriteBatch.Draw(fur4Texture, fur4Rect, Color.White);
+
+                _spriteBatch.DrawString(right, "Click Right to End the Tribbles!!", new Vector2(100, 500), Color.Black);
+            }
+           
+            else if (screen == Screen.End)
+            {
+                _spriteBatch.Draw(endTexture, new Rectangle(0, 0, 800, 600), Color.White);
+                _spriteBatch.DrawString(right, "The End!", new Vector2(100, 500), Color.Black);
+
+            }
 
 
 
@@ -235,7 +298,9 @@ namespace animation_lesson
 
 
 
-            _spriteBatch.End();
+
+
+                _spriteBatch.End();
 
             // TODO: Add your drawing code here
 
